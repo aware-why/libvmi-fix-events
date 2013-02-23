@@ -1,21 +1,54 @@
 #!/usr/bin/env python
-import commands
-from distutils.core import setup, Extension
+from setuptools import setup
 
-pkgconfig_cflags = commands.getoutput ("pkg-config --cflags glib-2.0 libvmi")
-pkgconfig_include_flags = commands.getoutput ("pkg-config --cflags-only-I glib-2.0 libvmi")
-pkgconfig_include_dirs = [ t[2:] for t in pkgconfig_include_flags.split() ]
-pkgconfig_lflags = commands.getoutput ("pkg-config --libs-only-l glib-2.0 libvmi")
-pkgconfig_libs = [ t[2:] for t in pkgconfig_lflags.split() ]
-pkgconfig_biglflags = commands.getoutput ("pkg-config --libs-only-L glib-2.0 libvmi")
-pkgconfig_ldirs = [ t[2:] for t in pkgconfig_biglflags.split() ]
+__about__ = {}
 
-pyvmimod = Extension('pyvmi', sources=['pyvmi.c'],
-                    include_dirs = pkgconfig_include_dirs,
-                    library_dirs = pkgconfig_ldirs,
-                    libraries = pkgconfig_libs,
-                    extra_compile_args=[pkgconfig_cflags])
+with open("pyvmi/__about__.py") as fp:
+    exec(fp.read(), None, __about__)
 
-setup(name='PyVmi', version='1.1',
-      description = 'Python interface to LibVMI',
-      ext_modules = [pyvmimod])
+
+try:
+    import pyvmi.libvmi
+except ImportError:
+    # installing - there is no cffi yet
+    ext_modules = []
+else:
+    # building bdist - cffi is here!
+    ext_modules = [pyvmi.libvmi.ffi.verifier.get_extension()]
+
+
+setup(
+    name=__about__["__title__"],
+    version=__about__["__version__"],
+
+    description=__about__["__summary__"],
+    long_description=open("README").read(),
+    url=__about__["__uri__"],
+    license=open('COPYING.LESSER').read(),
+
+    author=__about__["__author__"],
+    author_email=__about__["__email__"],
+
+    install_requires=[
+        "cffi",
+    ],
+    extras_require={
+        "tests": [
+            "pep8",
+            "pylint",
+            "pytest",
+        ],
+    },
+    tests_require=[
+        "pytest",
+    ],
+
+    packages=[
+        "pyvmi",
+    ],
+
+    ext_package="pyvmi",
+    ext_modules=ext_modules,
+
+    zip_safe=False,
+)

@@ -36,7 +36,7 @@ class vmi_init(object):
     def __enter__(self):
         return self.vmi
 
-    def __exit__(self, type, value traceback):
+    def __exit__(self, type, value, traceback):
         pass
 
     def __str__(self):
@@ -47,7 +47,8 @@ class vmi_init(object):
 
     def _addrlen(self):
         #return 4 for 32-bit systems, 8 for 64-bit systems
-
-    def read(self, pa=None, va=None, ksym=None,
-             size=self._addrlen, string=False):
         pass
+
+    def read(self, pa=None, va=None, ksym=None, size=None, string=False):
+        if size is None:
+            size = self._addrlen()

@@ -2162,7 +2162,7 @@ PyMODINIT_FUNC
 initpyvmi(
     void)
 {
-    (void) Py_InitModule("pyvmi", PyVmiMethods);
+    (void) Py_InitModule("capi", PyVmiMethods);
 }
 
 int
