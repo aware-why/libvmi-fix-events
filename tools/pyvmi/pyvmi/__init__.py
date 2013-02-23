@@ -21,10 +21,4 @@ You should have received a copy of the GNU Lesser General Public License
 along with LibVMI.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-__title__ = 'pyvmi'
-__version__ = '0.10.0'
-__author__ = 'Bryan D. Payne'
-__license__ = 'LGPL 3.0'
-__copyright__ = 'Copyright 2013 Bryan Payne'
-
 from .core import vmi_init
