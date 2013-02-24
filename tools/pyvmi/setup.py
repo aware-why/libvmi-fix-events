@@ -8,13 +8,13 @@ with open("pyvmi/__about__.py") as fp:
 
 
 try:
-    import pyvmi.libvmi
+    import pyvmi.interface
 except ImportError:
     # installing - there is no cffi yet
     ext_modules = []
 else:
     # building bdist - cffi is here!
-    ext_modules = [pyvmi.libvmi.ffi.verifier.get_extension()]
+    ext_modules = [pyvmi.interface.ffi.verifier.get_extension()]
 
 
 setup(

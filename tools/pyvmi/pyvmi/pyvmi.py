@@ -25,7 +25,7 @@ along with LibVMI.  If not, see <http://www.gnu.org/licenses/>.
 For reference:
     http://docs.python.org/2/reference/datamodel.html
 """
-class vmi_init(object):
+class Pyvmi(object):
     def __init__(self, name):
         # call init from capi, save vmi object as class var self.vmi
         pass
