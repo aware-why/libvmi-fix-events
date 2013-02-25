@@ -3,7 +3,7 @@ from setuptools import setup
 
 __about__ = {}
 
-with open("pyvmi/__about__.py") as fp:
+with open('pyvmi/__about__.py') as fp:
     exec(fp.read(), None, __about__)
 
 
@@ -18,36 +18,42 @@ else:
 
 
 setup(
-    name=__about__["__title__"],
-    version=__about__["__version__"],
+    name=__about__['__title__'],
+    version=__about__['__version__'],
 
-    description=__about__["__summary__"],
-    long_description=open("README").read(),
-    url=__about__["__uri__"],
+    description=__about__['__summary__'],
+    long_description=open('README').read(),
+    url=__about__['__uri__'],
     license=open('COPYING.LESSER').read(),
 
-    author=__about__["__author__"],
-    author_email=__about__["__email__"],
+    author=__about__['__author__'],
+    author_email=__about__['__email__'],
 
     install_requires=[
-        "cffi",
+        'cffi',
     ],
     extras_require={
-        "tests": [
-            "pep8",
-            "pylint",
-            "pytest",
+        'tests': [
+            'pep8',
+            'pylint',
+            'pytest',
         ],
     },
     tests_require=[
-        "pytest",
+        'pytest',
     ],
 
     packages=[
-        "pyvmi",
+        'pyvmi',
     ],
 
-    ext_package="pyvmi",
+    package_data={
+        'pyvmi': [
+            'interface.h'
+        ]
+    },
+
+    ext_package='pyvmi',
     ext_modules=ext_modules,
 
     zip_safe=False,

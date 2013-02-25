@@ -2,51 +2,20 @@
 CFFI interface to LibVMI
 """
 import functools
+import os
 
 from cffi import FFI, VerificationError
 
 
+INTERFACE_H = os.path.dirname(os.path.abspath(__file__)) + '/interface.h'
 __all__ = ["ffi", "lib"]
 
 
 # Setup CFFI with LibVMI
 ffi = FFI()
 
-ffi.cdef(
-    # pylint: disable=C0301
-
-    """
-        typedef ... *vmi_instance_t;
-        typedef enum status {
-            VMI_SUCCESS,
-            VMI_FAILURE
-        } status_t;
-        typedef uint64_t addr_t;
-
-        #define VMI_AUTO ...
-        #define VMI_INIT_COMPLETE ...
-
-        status_t vmi_init(vmi_instance_t *vmi, uint32_t flags, char *name);
-        status_t vmi_destroy(vmi_instance_t vmi);
-
-        status_t vmi_read_addr_ksym(vmi_instance_t vmi, char *sym, addr_t *value);
-        status_t vmi_read_addr_va(vmi_instance_t vmi, addr_t vaddr, int pid, addr_t *value);
-        status_t vmi_read_32_va(vmi_instance_t vmi, addr_t vaddr, int pid, uint32_t * value);
-        char *vmi_read_str_va(vmi_instance_t vmi, addr_t vaddr, int pid);
-
-        unsigned long vmi_get_offset(vmi_instance_t vmi, char *offset_name);
-    """
-)
-
-lib = ffi.verify(
-    # pylint: disable=C0301
-
-    """
-        #include <libvmi/libvmi.h>
-    """,
-
-    libraries=['vmi']
-)
+ffi.cdef(open(INTERFACE_H, 'r').read())
+lib = ffi.verify('#include <libvmi/libvmi.h>', libraries=['vmi'])
 
 
 # Convert return values from LibVMI
