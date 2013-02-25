@@ -1,5 +1,5 @@
 """
-CFFI interface to LibVMI
+Low-level LibVMI access from Python
 """
 from .interface import ffi, lib
 from .exceptions import LibvmiError
