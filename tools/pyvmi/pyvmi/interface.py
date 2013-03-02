@@ -29,8 +29,51 @@ def wrap_libvmi_func(func):
                 ret == 'VMI_SUCCESS')      # cffi <= 0.5
     return wrapper
 
-lib.vmi_init = wrap_libvmi_func(lib.vmi_init)
 
+# wrap functions that return status_t
+lib.vmi_init = wrap_libvmi_func(lib.vmi_init)
+lib.vmi_init_custom = wrap_libvmi_func(lib.vmi_init_custom)
+lib.vmi_init_complete = wrap_libvmi_func(lib.vmi_init_complete)
+lib.vmi_init_complete_custom = wrap_libvmi_func(lib.vmi_init_complete_custom)
+lib.vmi_destroy = wrap_libvmi_func(lib.vmi_destroy)
+
+lib.vmi_read_8_ksym = wrap_libvmi_func(lib.vmi_read_8_ksym)
+lib.vmi_read_16_ksym = wrap_libvmi_func(lib.vmi_read_16_ksym)
+lib.vmi_read_32_ksym = wrap_libvmi_func(lib.vmi_read_32_ksym)
+lib.vmi_read_64_ksym = wrap_libvmi_func(lib.vmi_read_64_ksym)
 lib.vmi_read_addr_ksym = wrap_libvmi_func(lib.vmi_read_addr_ksym)
-lib.vmi_read_addr_va = wrap_libvmi_func(lib.vmi_read_addr_va)
+
+lib.vmi_read_8_va = wrap_libvmi_func(lib.vmi_read_8_va)
+lib.vmi_read_16_va = wrap_libvmi_func(lib.vmi_read_16_va)
 lib.vmi_read_32_va = wrap_libvmi_func(lib.vmi_read_32_va)
+lib.vmi_read_64_va = wrap_libvmi_func(lib.vmi_read_64_va)
+lib.vmi_read_addr_va = wrap_libvmi_func(lib.vmi_read_addr_va)
+lib.vmi_convert_str_encoding = wrap_libvmi_func(lib.vmi_convert_str_encoding)
+
+lib.vmi_read_8_pa = wrap_libvmi_func(lib.vmi_read_8_pa)
+lib.vmi_read_16_pa = wrap_libvmi_func(lib.vmi_read_16_pa)
+lib.vmi_read_32_pa = wrap_libvmi_func(lib.vmi_read_32_pa)
+lib.vmi_read_64_pa = wrap_libvmi_func(lib.vmi_read_64_pa)
+lib.vmi_read_addr_pa = wrap_libvmi_func(lib.vmi_read_addr_pa)
+
+lib.vmi_write_8_ksym = wrap_libvmi_func(lib.vmi_write_8_ksym)
+lib.vmi_write_16_ksym = wrap_libvmi_func(lib.vmi_write_16_ksym)
+lib.vmi_write_32_ksym = wrap_libvmi_func(lib.vmi_write_32_ksym)
+lib.vmi_write_64_ksym = wrap_libvmi_func(lib.vmi_write_64_ksym)
+lib.vmi_write_addr_ksym = wrap_libvmi_func(lib.vmi_write_addr_ksym)
+
+lib.vmi_write_8_va = wrap_libvmi_func(lib.vmi_write_8_va)
+lib.vmi_write_16_va = wrap_libvmi_func(lib.vmi_write_16_va)
+lib.vmi_write_32_va = wrap_libvmi_func(lib.vmi_write_32_va)
+lib.vmi_write_64_va = wrap_libvmi_func(lib.vmi_write_64_va)
+lib.vmi_write_addr_va = wrap_libvmi_func(lib.vmi_write_addr_va)
+
+lib.vmi_write_8_pa = wrap_libvmi_func(lib.vmi_write_8_pa)
+lib.vmi_write_16_pa = wrap_libvmi_func(lib.vmi_write_16_pa)
+lib.vmi_write_32_pa = wrap_libvmi_func(lib.vmi_write_32_pa)
+lib.vmi_write_64_pa = wrap_libvmi_func(lib.vmi_write_64_pa)
+lib.vmi_write_addr_pa = wrap_libvmi_func(lib.vmi_write_addr_pa)
+
+lib.vmi_get_vcpureg = wrap_libvmi_func(lib.vmi_get_vcpureg)
+lib.vmi_pause_vm = wrap_libvmi_func(lib.vmi_pause_vm)
+lib.vmi_resume_vm = wrap_libvmi_func(lib.vmi_resume_vm)
