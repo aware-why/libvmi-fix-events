@@ -25,7 +25,7 @@ License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with LibVMI.  If not, see <http://www.gnu.org/licenses/>.
 """
-from pyvmi import libvmi
+from pyvmi.libvmi import Libvmi, C
 import sys
 
 
@@ -50,7 +50,7 @@ def get_processes(vmi):
 
 
 def main(argv):
-    vmi = libvmi.Libvmi(argv[1], "complete")
+    vmi = Libvmi().init(C.VMI_AUTO | C.VMI_INIT_COMPLETE, argv[1])
     for pid, procname in get_processes(vmi):
         print "[%5d] %s" % (pid, procname)
 
