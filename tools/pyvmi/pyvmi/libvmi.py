@@ -40,10 +40,10 @@ class Libvmi(object):
         pass
 
     def translate_uv2p(self, vaddr, pid):
-        pass
+        return lib.vmi_translate_uv2p(self.vmi[0], vaddr, pid)
 
     def translate_ksym2v(self, symbol):
-        pass
+        return lib.vmi_translate_ksym2v(self.vmi[0], symbol)
 
     def pid_to_dtb(self, pid):
         pass
@@ -82,7 +82,7 @@ class Libvmi(object):
         return struct.unpack('I', self.read_ksym(sym, 4))[0]
 
     def read_64_ksym(self, sym):
-        return struct.unpack('K', self.read_ksym(sym, 8))[0]
+        return struct.unpack('Q', self.read_ksym(sym, 8))[0]
 
     def read_addr_ksym(self, sym):
         value = ffi.new('addr_t *')
@@ -92,7 +92,10 @@ class Libvmi(object):
 
     def read_str_ksym(self, sym):
         value = lib.vmi_read_str_ksym(self.vmi[0], sym)
-        return ffi.string(value)
+        if value == ffi.NULL:
+            return None
+        else:
+            return ffi.string(value)
 
     def read_8_va(self, vaddr, pid):
         return struct.unpack('B', self.read_va(vaddr, pid, 1))[0]
@@ -104,7 +107,7 @@ class Libvmi(object):
         return struct.unpack('I', self.read_va(vaddr, pid, 4))[0]
 
     def read_64_va(self, vaddr, pid):
-        return struct.unpack('K', self.read_va(vaddr, pid, 8))[0]
+        return struct.unpack('Q', self.read_va(vaddr, pid, 8))[0]
 
     def read_addr_va(self, vaddr, pid):
         value = ffi.new('addr_t *')
@@ -114,7 +117,10 @@ class Libvmi(object):
 
     def read_str_va(self, vaddr, pid):
         value = lib.vmi_read_str_va(self.vmi[0], vaddr, pid)
-        return ffi.string(value)
+        if value == ffi.NULL:
+            return None
+        else:
+            return ffi.string(value)
 
     def read_unicode_str_va(self, vaddr, pid):
         pass
@@ -132,7 +138,7 @@ class Libvmi(object):
         return struct.unpack('I', self.read_pa(paddr, 4))[0]
 
     def read_64_pa(self, paddr):
-        return struct.unpack('K', self.read_pa(paddr, 8))[0]
+        return struct.unpack('Q', self.read_pa(paddr, 8))[0]
 
     def read_addr_pa(self, paddr):
         value = ffi.new('addr_t *')
@@ -142,7 +148,10 @@ class Libvmi(object):
 
     def read_str_pa(self, paddr):
         value = lib.vmi_read_str_pa(self.vmi[0], paddr)
-        return ffi.string(value)
+        if value == ffi.NULL:
+            return None
+        else:
+            return ffi.string(value)
 
     #
     # Memory write
@@ -153,3 +162,9 @@ class Libvmi(object):
     #
     def get_offset(self, name):
         return lib.vmi_get_offset(self.vmi[0], name)
+
+    def get_page_mode(self):
+        return lib.vmi_get_page_mode(self.vmi[0])
+
+    def get_ostype(self):
+        return lib.vmi_get_ostype(self.vmi[0])

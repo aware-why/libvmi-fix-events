@@ -25,34 +25,39 @@ License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with LibVMI.  If not, see <http://www.gnu.org/licenses/>.
 """
-from pyvmi.libvmi import Libvmi, C
+import pyvmi
 import sys
 
 
 def get_processes(vmi):
-    tasks_offset = vmi.get_offset("win_tasks")
-    name_offset = vmi.get_offset("win_pname") - tasks_offset
-    pid_offset = vmi.get_offset("win_pid") - tasks_offset
+    if vmi['ostype'] == 'Linux':
+        current_process = vmi.translate(ksym='init_task')
+    elif vmi['ostype'] == 'Windows':
+        current_process = vmi.read(ksym='PsInitialSystemProcess')
 
-    list_head = vmi.read_addr_ksym("PsInitialSystemProcess")
-    next_process = vmi.read_addr_va(list_head + tasks_offset, 0)
-    list_head = next_process
+    list_head = current_process + vmi['tasks_offset']
+    next_list_entry = vmi.read(va=list_head)
 
-    while True:
-        procname = vmi.read_str_va(next_process + name_offset, 0)
-        pid = vmi.read_32_va(next_process + pid_offset, 0)
-        next_process = vmi.read_addr_va(next_process, 0)
+    while (next_list_entry != list_head):
+        yield(current_process)
+        current_process = next_list_entry - vmi['tasks_offset']
+        next_list_entry = vmi.read(va=next_list_entry)
 
+
+def get_pid_and_proc(vmi):
+    process_structs = get_processes(vmi)
+    for struct in process_structs:
+        procname = vmi.read(va=struct + vmi['name_offset'], string=True)
+        pid = vmi.read(va=struct + vmi['pid_offset'], size=4)
         if (pid < 1<<16):
             yield pid, procname
-        if (list_head == next_process):
-            break
 
 
 def main(argv):
-    vmi = Libvmi().init(C.VMI_AUTO | C.VMI_INIT_COMPLETE, argv[1])
-    for pid, procname in get_processes(vmi):
-        print "[%5d] %s" % (pid, procname)
+    with pyvmi.init(argv[1]) as vmi:
+        for pid, procname in get_pid_and_proc(vmi):
+            print "[%5d] %s" % (pid, procname)
+
 
 if __name__ == "__main__":
     main(sys.argv)

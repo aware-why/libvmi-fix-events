@@ -21,4 +21,4 @@ You should have received a copy of the GNU Lesser General Public License
 along with LibVMI.  If not, see <http://www.gnu.org/licenses/>.
 """
 from . import __about__
-from .pyvmi import Pyvmi
+from .pyvmi import Pyvmi as init
