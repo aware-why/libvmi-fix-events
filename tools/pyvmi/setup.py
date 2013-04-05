@@ -45,7 +45,7 @@ setup(
     description=__about__['__summary__'],
     long_description=open('README').read(),
     url=__about__['__uri__'],
-    license=open('COPYING.LESSER').read(),
+    license=open('LICENSE').read(),
 
     author=__about__['__author__'],
     author_email=__about__['__email__'],

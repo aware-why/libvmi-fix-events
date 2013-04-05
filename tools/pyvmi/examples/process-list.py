@@ -25,6 +25,7 @@ import sys
 
 
 def get_processes(vmi):
+    """ Generator returns address of each task_struct / EPROCESS struct."""
     if vmi['ostype'] == 'Linux':
         current_process = vmi.translate(ksym='init_task')
     elif vmi['ostype'] == 'Windows':
@@ -40,15 +41,17 @@ def get_processes(vmi):
 
 
 def get_pid_and_proc(vmi):
+    """ Generator returns pid, process name tuples for each running process."""
     process_structs = get_processes(vmi)
     for struct in process_structs:
         procname = vmi.read(va=struct + vmi['name_offset'], string=True)
         pid = vmi.read(va=struct + vmi['pid_offset'], size=4)
-        if (pid < 1<<16):
+        if (pid < (1 << 16)):
             yield pid, procname
 
 
 def main(argv):
+    """ Prints process information for given target."""
     with pyvmi.init(argv[1]) as vmi:
         for pid, procname in get_pid_and_proc(vmi):
             print "[%5d] %s" % (pid, procname)
